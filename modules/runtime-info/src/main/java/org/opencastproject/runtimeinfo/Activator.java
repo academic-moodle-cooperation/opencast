@@ -116,10 +116,26 @@ public class Activator extends HttpServlet implements BundleActivator {
           throws IOException {
     ServiceReference reference = null;
     for (ServiceReference ref : getRestEndpointServices()) {
-      String alias = (String) ref.getProperty(SERVICE_PATH_PROPERTY);
-      if (docPath.equalsIgnoreCase(alias)) {
-        reference = ref;
-        break;
+      String alias = ref.getProperty(SERVICE_PATH_PROPERTY).toString();
+      if (docPath.startsWith(alias)) {
+
+        final Object service = bundleContext.getService(ref);
+        Path pathClass = service.getClass().getAnnotation(Path.class);
+
+        if (pathClass != null && pathClass.value().length() > 1)
+        {
+          if (alias.endsWith("/")) {
+            alias = alias.substring(0,alias.length() - 1);
+          }
+
+          String pathClassValue = pathClass.value().startsWith("/") ? pathClass.value() : "/" + pathClass.value();
+          alias += pathClassValue;
+        }
+
+        if (docPath.equals(alias)) {
+          reference = ref;
+          break;
+        }
       }
     }
 
@@ -140,8 +156,6 @@ public class Activator extends HttpServlet implements BundleActivator {
 
           Produces producesClass = (Produces) restService.getClass().getAnnotation(Produces.class);
 
-          Path pathClass = (Path) restService.getClass().getAnnotation(Path.class);
-
           for (Method m : restService.getClass().getMethods()) {
             RestQuery rq = (RestQuery) m.getAnnotation(RestQuery.class);
             String httpMethodString = null;
@@ -157,8 +171,8 @@ public class Activator extends HttpServlet implements BundleActivator {
             }
             Path path = (Path) m.getAnnotation(Path.class);
             Class<?> returnType = m.getReturnType();
-            if ((rq != null) && (httpMethodString != null) && (path != null) && (pathClass != null)) {
-              data.addEndpoint(rq, returnType, produces, httpMethodString, pathClass, path);
+            if ((rq != null) && (httpMethodString != null) && (path != null)) {
+              data.addEndpoint(rq, returnType, produces, httpMethodString, path);
             }
           }
           String template = DocUtil.loadTemplate("/ui/restdocs/template.xhtml");

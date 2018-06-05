@@ -239,6 +239,19 @@ public class RuntimeInfo {
       String description = (String) servletRef.getProperty(Constants.SERVICE_DESCRIPTION);
       String type = (String) servletRef.getProperty(RestConstants.SERVICE_TYPE_PROPERTY);
       String servletContextPath = (String) servletRef.getProperty(RestConstants.SERVICE_PATH_PROPERTY);
+
+      final Object service = bundleContext.getService(servletRef);
+      Path pathClass = service.getClass().getAnnotation(Path.class);
+
+      if (pathClass != null && pathClass.value().length() > 1)
+      {
+        if (servletContextPath.endsWith("/")) {
+          servletContextPath = servletContextPath.substring(0,servletContextPath.length() - 1);
+        }
+        String pathClassValue = pathClass.value().startsWith("/") ? pathClass.value() : "/" + pathClass.value();
+        servletContextPath += pathClassValue;
+      }
+
       JSONObject endpoint = new JSONObject();
       endpoint.put("description", description);
       endpoint.put("version", version);
