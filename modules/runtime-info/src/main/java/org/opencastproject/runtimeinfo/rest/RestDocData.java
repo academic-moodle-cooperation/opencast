@@ -317,11 +317,13 @@ public class RestDocData extends DocData {
    * @param path
    *          the path of this endpoint
    */
-  public void addEndpoint(RestQuery restQuery, Class<?> returnType, Produces produces, String httpMethodString,
+  public void addEndpoint(RestQuery restQuery, Class<?> returnType, Produces produces, String httpMethodString,Path pathClass,
           Path path) {
+    String pathClassValue = pathClass.value().startsWith("/") ? pathClass.value() : "/" + pathClass.value();
     String pathValue = path.value().startsWith("/") ? path.value() : "/" + path.value();
+    String completePath = pathClassValue.length() <=1 ? pathValue : pathClassValue + pathValue;
     RestEndpointData endpoint = new RestEndpointData(returnType, this.processMacro(restQuery.name()), httpMethodString,
-            pathValue, processMacro(restQuery.description()));
+            completePath, processMacro(restQuery.description()));
     // Add return description if needed
     if (!restQuery.returnDescription().isEmpty()) {
       endpoint.addNote("Return value description: " + processMacro(restQuery.returnDescription()));

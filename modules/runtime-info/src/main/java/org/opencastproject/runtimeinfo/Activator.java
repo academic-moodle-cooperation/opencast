@@ -138,6 +138,10 @@ public class Activator extends HttpServlet implements BundleActivator {
                   restService, globalMacro);
           data.setAbstract(annotation.abstractText());
 
+          Produces producesClass = (Produces) restService.getClass().getAnnotation(Produces.class);
+
+          Path pathClass = (Path) restService.getClass().getAnnotation(Path.class);
+
           for (Method m : restService.getClass().getMethods()) {
             RestQuery rq = (RestQuery) m.getAnnotation(RestQuery.class);
             String httpMethodString = null;
@@ -148,10 +152,13 @@ public class Activator extends HttpServlet implements BundleActivator {
               }
             }
             Produces produces = (Produces) m.getAnnotation(Produces.class);
+            if (produces == null) {
+              produces = producesClass;
+            }
             Path path = (Path) m.getAnnotation(Path.class);
             Class<?> returnType = m.getReturnType();
-            if ((rq != null) && (httpMethodString != null) && (path != null)) {
-              data.addEndpoint(rq, returnType, produces, httpMethodString, path);
+            if ((rq != null) && (httpMethodString != null) && (path != null) && (pathClass != null)) {
+              data.addEndpoint(rq, returnType, produces, httpMethodString, pathClass, path);
             }
           }
           String template = DocUtil.loadTemplate("/ui/restdocs/template.xhtml");
