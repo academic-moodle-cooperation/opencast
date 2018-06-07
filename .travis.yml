@@ -42,7 +42,7 @@ install:
      tesseract-ocr-deu
      unzip
   - mkdir -p ~/.m2 ~/bin
-  - wget -q https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz
+  - wget -q https://pkg.opencast.org/bin/ffmpeg-release-64bit-static.tar.xz
   - tar xf ffmpeg-release-64bit-static.tar.xz
   - mv ffmpeg-*/ff* ~/bin/
   - >
@@ -82,13 +82,20 @@ jobs:
         - mvn clean install -Pnone
 
     # Make a simple build to generate all Opencast artifacts while excluding as many checks as possible since we do a
-    # proper test in parallel anyway. Then run `mvn site` to generate Javadocs.
+    # proper test in parallel anyway. Then run `mvn site` to generate Javadocs. We exclude checkstyle and tests since
+    # they are run separately. For now, we also exclude pmd and cpd since we are not doing anything with their report.
     - stage: build
       env: name=site
       before_script:
-        - mvn install -DskipTests=true -Dcheckstyle.skip=true -Pnone
+        - mvn install -DskipTests=true -Dcheckstyle.skip=true -P "none,!frontend"
       script:
-        - mvn site -Pnone -Dcheckstyle.skip=true
+        - >
+           mvn site -Daggregate=true site:stage "-DstagingDirectory=$(pwd)/site" \
+             -P "none,!frontend" \
+             -DskipTests=true \
+             -Dcheckstyle.skip=true \
+             -Dpmd.skip=true \
+             -Dcpd.skip=true
 
     # Deploy translation keys to Crowdin if we are on develop or one of the release branches
     - stage: deployment

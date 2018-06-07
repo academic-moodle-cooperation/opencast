@@ -22,8 +22,6 @@
 
 package org.opencastproject.composer.impl;
 
-import static org.apache.commons.lang3.StringUtils.startsWithAny;
-
 import org.opencastproject.composer.api.EncoderException;
 import org.opencastproject.composer.api.EncodingProfile;
 import org.opencastproject.util.IoSupport;
@@ -362,8 +360,8 @@ public class EncoderEngine implements AutoCloseable {
       return;
 
     // Others go to trace logging
-    if (startsWithAny(message.toLowerCase(),
-          new String[] {"ffmpeg version", "configuration", "lib", "size=", "frame=", "built with"})) {
+    if (StringUtils.startsWithAny(message.toLowerCase(),
+          "ffmpeg version", "configuration", "lib", "size=", "frame=", "built with")) {
       logger.trace(message);
 
     // Handle output files
@@ -371,16 +369,21 @@ public class EncoderEngine implements AutoCloseable {
       logger.debug(message);
       Matcher matcher = outputPattern.matcher(message);
       if (matcher.find()) {
-        File outputFile = new File(matcher.group(1));
-        logger.info("Identified output file {}", outputFile);
-        output.add(outputFile);
+        String outputPath = matcher.group(1);
+        if (!StringUtils.equals("NUL", outputPath)
+                && !StringUtils.equals("/dev/null", outputPath)
+                && !StringUtils.startsWith("pipe:", outputPath)) {
+          File outputFile = new File(outputPath);
+          logger.info("Identified output file {}", outputFile);
+          output.add(outputFile);
+        }
       }
 
     // Some to debug
-    } else if (startsWithAny(message.toLowerCase(),
-          new String[] { "artist", "compatible_brands", "copyright", "creation_time", "description", "duration",
+    } else if (StringUtils.startsWithAny(message.toLowerCase(),
+          "artist", "compatible_brands", "copyright", "creation_time", "description", "duration",
             "encoder", "handler_name", "input #", "last message repeated", "major_brand", "metadata", "minor_version",
-            "output #", "program", "side data:", "stream #", "stream mapping", "title", "video:", "[libx264 @ "})) {
+            "output #", "program", "side data:", "stream #", "stream mapping", "title", "video:", "[libx264 @ ")) {
       logger.debug(message);
 
     // And the rest is likely to deserve at least info

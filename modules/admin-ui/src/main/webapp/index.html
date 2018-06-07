@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="../../bower_components/angular-hotkeys/build/hotkeys.css" />
         <!-- endbower -->
         <!-- endbuild -->
-        <!-- build:css(.tmp) styles/main.css -->
+        <!-- build:css(target/grunt/.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
         <link type="text/css" href="lib/datepicker/themes/smoothness/jquery-ui-1.10.3.min.css" rel="stylesheet">
@@ -119,7 +119,7 @@
         </footer>
 
 
-        <!-- build:js({.tmp,src/main}) scripts/bower.js -->
+        <!-- build:js(src/main) scripts/bower.js -->
         <!-- bower:js -->
         <script src="../../bower_components/angular/angular.js"></script>
         <script src="../../bower_components/angular-route/angular-route.js"></script>
@@ -135,14 +135,14 @@
         <script src="../../bower_components/ng-file-upload/angular-file-upload.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
-        <!-- build:js({.tmp,src/main/webapp}) scripts/vendor.js -->
+        <!-- build:js(src/main/webapp) scripts/vendor.js -->
         <script src="scripts/lib/angular-chosen.js"></script>
         <script src="scripts/lib/angular-sortable.js"></script>
         <script src="scripts/lib/video-js/video.js"></script>
         <script src="scripts/lib/javascript-md5/js/md5.min.js"></script>
         <!-- endbuild -->
 
-        <!-- build:js({.tmp,src/main/webapp}) scripts/scripts.js -->
+        <!-- build:js(src/main/webapp) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/shared/services/services.js"></script>
         <script src="scripts/shared/services/resourceHelperService.js"></script>
@@ -186,14 +186,15 @@
         <script src="scripts/shared/resources/newSeriesThemeResource.js"></script>
         <script src="scripts/shared/resources/conflictCheckResource.js"></script>
         <script src="scripts/shared/resources/bulkDeleteResource.js"></script>
-        <script src="scripts/shared/resources/eventMediaResource.js"></script>
+        <script src="scripts/shared/resources/eventAssetMediaResource.js"></script>
         <script src="scripts/shared/resources/eventAttachmentDetailsResource.js"></script>
         <script src="scripts/shared/resources/eventMediaDetailsResource.js"></script>
         <script src="scripts/shared/resources/eventCatalogDetailsResource.js"></script>
         <script src="scripts/shared/resources/eventParticipationResource.js"></script>
         <script src="scripts/shared/resources/eventPublicationDetailsResource.js"></script>
-        <script src="scripts/shared/resources/eventPublicationsResource.js"></script>
+        <script src="scripts/shared/resources/eventAssetPublicationsResource.js"></script>
         <script src="scripts/shared/resources/eventSchedulingResource.js"></script>
+        <script src="scripts/shared/resources/eventsSchedulingResource.js"></script>
         <script src="scripts/shared/resources/eventWorkflowsResource.js"></script>
         <script src="scripts/shared/resources/eventTransactionResource.js"></script>
         <script src="scripts/shared/resources/eventErrorsResource.js"></script>
@@ -202,12 +203,13 @@
         <script src="scripts/shared/resources/eventWorkflowOperationsResource.js"></script>
         <script src="scripts/shared/resources/eventWorkflowOperationDetailsResource.js"></script>
         <script src="scripts/shared/resources/eventWorkflowActionResource.js"></script>
-        <script src="scripts/shared/resources/eventAttachmentsResource.js"></script>
-        <script src="scripts/shared/resources/eventCatalogsResource.js"></script>
+        <script src="scripts/shared/resources/eventAssetAttachmentsResource.js"></script>
+        <script src="scripts/shared/resources/eventAssetCatalogsResource.js"></script>
         <script src="scripts/shared/resources/eventAssetsResource.js"></script>
         <script src="scripts/shared/resources/eventAccessResource.js"></script>
-        <script src="scripts/shared/resources/eventGeneralResource.js"></script>
+        <script src="scripts/shared/resources/eventPublicationsResource.js"></script>
         <script src="scripts/shared/resources/eventHasSnapshotsResource.js"></script>
+        <script src="scripts/shared/resources/eventBulkEditResource.js"></script>
         <script src="scripts/shared/resources/toolsResource.js"></script>
         <script src="scripts/shared/resources/commentResource.js"></script>
         <script src="scripts/shared/resources/usersResource.js"></script>
@@ -281,7 +283,6 @@
         <script src="scripts/shared/filters/humanByteSizeFilter.js"></script>
         <script src="scripts/shared/filters/humanDurationFilter.js"></script>
         <script src="scripts/shared/filters/arrayFilter.js"></script>
-        <script src="scripts/shared/filters/presentValue.js"></script>
         <script src="scripts/shared/filters/removeQueryParams.js"></script>
         <script src="scripts/shared/filters/translateOverrideFallbackFilter.js"></script>
         <script src="scripts/shared/filters/trustedResourceUrlFilter.js"></script>
@@ -333,6 +334,7 @@
         <script src="scripts/modules/events/controllers/eventsController.js"></script>
         <script src="scripts/modules/events/controllers/eventController.js"></script>
         <script src="scripts/modules/events/controllers/editStatusController.js"></script>
+        <script src="scripts/modules/events/controllers/editEventsController.js"></script>
         <script src="scripts/modules/events/controllers/newEventController.js"></script>
         <script src="scripts/modules/events/controllers/newSeriesController.js"></script>
         <script src="scripts/modules/events/controllers/seriesController.js"></script>
