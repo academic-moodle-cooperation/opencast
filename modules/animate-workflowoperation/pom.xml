@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.opencastproject</groupId>
     <artifactId>base</artifactId>
-    <version>5-SNAPSHOT</version>
+    <version>5.0</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   <properties>
@@ -24,6 +24,12 @@
     <dependency>
       <groupId>org.opencastproject</groupId>
       <artifactId>opencast-animate-api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opencastproject</groupId>
+      <artifactId>opencast-inspection-service-api</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -75,11 +81,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opencastproject</groupId>
-      <artifactId>opencast-inspection-service-api</artifactId>
-      <version>5-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build>
