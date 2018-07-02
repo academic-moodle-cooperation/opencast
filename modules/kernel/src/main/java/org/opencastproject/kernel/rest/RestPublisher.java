@@ -28,6 +28,14 @@ import org.opencastproject.security.api.UnauthorizedException;
 import org.opencastproject.systems.OpencastConstants;
 import org.opencastproject.util.NotFoundException;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -168,11 +176,34 @@ public class RestPublisher implements RestConstants {
     servletRegistrationMap = new ConcurrentHashMap<>();
     providers = new ArrayList<>();
 
-    JSONProvider jsonProvider = new OpencastJSONProvider();
+    /*JSONProvider jsonProvider = new OpencastJSONProvider();
     jsonProvider.setIgnoreNamespaces(true);
-    jsonProvider.setNamespaceMap(NAMESPACE_MAP);
+    jsonProvider.setNamespaceMap(NAMESPACE_MAP);*/
+
+    JaxbAnnotationModule module = new JaxbAnnotationModule()
+            .setNonNillableInclusion(JsonInclude.Include.NON_NULL);
+
+    ObjectMapper mapper = new ObjectMapper()
+            .setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+    JaxbAnnotationIntrospector annotationIntrospector = new JaxbAnnotationIntrospector(mapper.getTypeFactory());
+    annotationIntrospector.setNonNillableInclusion(JsonInclude.Include.NON_NULL);
+
+    mapper.registerModule(module);
+    mapper.enable(SerializationFeature.WRAP_ROOT_VALUE)
+            .enable(SerializationFeature.WRITE_SINGLE_ELEM_ARRAYS_UNWRAPPED)
+            .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
+    JacksonJaxbJsonProvider jsonProvider = new JacksonJaxbJsonProvider();
+    jsonProvider.setMapper(mapper);
+
+    JacksonJsonProvider jsonProvider1 = new JacksonJsonProvider();
+    ObjectMapper mapper1 = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    jsonProvider1.setMapper(mapper1);
 
     providers.add(jsonProvider);
+    providers.add(jsonProvider1);
+
     providers.add(new ExceptionMapper<NotFoundException>() {
       @Override
       public Response toResponse(NotFoundException e) {
@@ -307,6 +338,8 @@ public class RestPublisher implements RestConstants {
 
     // Set up cxf
     Bus bus = cxf.getBus();
+    //deactivate default json provider
+    bus.setProperty("skip.default.json.provider.registration",true);
     JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
     sf.setBus(bus);
     sf.setProviders(providers);
