@@ -371,4 +371,5 @@ public class DublinCoreCatalogUIAdapterTest {
     DublinCoreMetadataUtil.updateDublincoreCatalog(catalog, metadata);
     logger.info("Catalog:" + catalog.toXmlString());
   }
+
 }

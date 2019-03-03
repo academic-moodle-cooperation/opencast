@@ -264,7 +264,7 @@
           <source>${jdk.version}</source>
           <target>${jdk.version}</target>
           <encoding>UTF-8</encoding>
-          <compilerArgument>${compilerArgument}</compilerArgument>
+          <!--compilerArgument>${compilerArgument}</compilerArgument-->
         </configuration>
       </plugin>
       <plugin>
